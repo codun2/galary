@@ -73,7 +73,24 @@ class DashboardController extends Controller
         return response()->json(['message' => 'تم التحديث', 'lead' => $lead]);
     }
 
-    // ---- الإعدادات ----
+    // ---- الإعدادات ونصوص الموقع ----
+    /** كل المفاتيح المسموح للمعرض التحكم بها (معلومات + نصوص الموقع) */
+    public const SETTING_KEYS = [
+        // معلومات المعرض
+        'showroom_name', 'phone', 'whatsapp', 'address', 'hours', 'about',
+        // الواجهة الرئيسية
+        'hero_badge', 'hero_title', 'hero_subtitle', 'search_title',
+        'featured_title', 'featured_subtitle',
+        // قسم لماذا نحن (4 بطاقات)
+        'why_title',
+        'why1_title', 'why1_text', 'why2_title', 'why2_text',
+        'why3_title', 'why3_text', 'why4_title', 'why4_text',
+        // دعوة أسفل الصفحة
+        'cta_title', 'cta_text', 'cta_button',
+        // الفوتر
+        'footer_text',
+    ];
+
     public function getSettings()
     {
         return response()->json(Setting::all_map());
@@ -81,18 +98,51 @@ class DashboardController extends Controller
 
     public function saveSettings(Request $request)
     {
-        $data = $request->validate([
-            'showroom_name' => 'nullable|string|max:120',
-            'phone' => 'nullable|string|max:30',
-            'whatsapp' => 'nullable|string|max:30',
-            'address' => 'nullable|string|max:255',
-            'hours' => 'nullable|string|max:120',
-            'about' => 'nullable|string|max:1000',
-        ]);
+        $rules = [];
+        foreach (self::SETTING_KEYS as $k) $rules[$k] = 'nullable|string|max:1000';
+        $data = $request->validate($rules);
 
-        foreach ($data as $k => $v) Setting::put($k, $v);
+        foreach ($data as $k => $v) {
+            if ($request->has($k)) Setting::put($k, $v);
+        }
 
         return response()->json(['message' => 'تم حفظ الإعدادات']);
+    }
+
+    // ---- الأنواع والموديلات ----
+    public function catalog()
+    {
+        return response()->json(\App\Models\Make::with('models')->orderBy('name')->get());
+    }
+
+    public function storeMake(Request $request)
+    {
+        $data = $request->validate(['name' => 'required|string|max:60|unique:makes,name']);
+        $make = \App\Models\Make::create($data);
+
+        return response()->json($make->load('models'), 201);
+    }
+
+    public function deleteMake(\App\Models\Make $make)
+    {
+        $make->delete();
+
+        return response()->json(['message' => 'تم حذف النوع وموديلاته']);
+    }
+
+    public function storeModel(Request $request, \App\Models\Make $make)
+    {
+        $data = $request->validate(['name' => 'required|string|max:80']);
+        $model = $make->models()->firstOrCreate(['name' => $data['name']]);
+
+        return response()->json($model, 201);
+    }
+
+    public function deleteModel(\App\Models\CarModel $carModel)
+    {
+        $carModel->delete();
+
+        return response()->json(['message' => 'تم حذف الموديل']);
     }
 
     private function validated(Request $request): array

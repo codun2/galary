@@ -3,7 +3,7 @@
     <div class="fcols">
       <div>
         <div class="brand"><div class="logo"><i class="ti ti-car"></i></div><b>{{ settings.showroom_name || 'أوتو غاليري' }}</b></div>
-        <p class="about">{{ settings.about || 'معرض سيارات يقدّم تشكيلة مختارة من السيارات المفحوصة.' }}</p>
+        <p class="about">{{ settings.footer_text || settings.about || 'معرض سيارات يقدّم تشكيلة مختارة من السيارات المفحوصة.' }}</p>
       </div>
       <div>
         <h5>روابط</h5>

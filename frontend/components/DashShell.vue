@@ -8,6 +8,7 @@
       <nav>
         <NuxtLink to="/admin" :class="{ on: active === 'overview' }"><i class="ti ti-layout-dashboard"></i> نظرة عامة</NuxtLink>
         <NuxtLink to="/admin/add" :class="{ on: active === 'add' }"><i class="ti ti-plus"></i> إضافة سيارة</NuxtLink>
+        <NuxtLink to="/admin/catalog" :class="{ on: active === 'catalog' }"><i class="ti ti-list-details"></i> الأنواع والموديلات</NuxtLink>
         <NuxtLink to="/admin/leads" :class="{ on: active === 'leads' }">
           <i class="ti ti-message"></i> الطلبات والاستفسارات
           <span v-if="newLeads" class="nbadge">{{ newLeads }}</span>

@@ -9,8 +9,23 @@
       <div class="panel">
         <h3 class="sec-t">بيانات السيارة</h3>
         <div class="g3">
-          <div class="frow"><label>الماركة</label><input v-model="f.make" placeholder="مرسيدس" required /></div>
-          <div class="frow"><label>الموديل</label><input v-model="f.model" placeholder="GLC 300" required /></div>
+          <div class="frow">
+            <label>النوع (الماركة)</label>
+            <select v-if="catalog.length" v-model="f.make" @change="onMakeChange" required>
+              <option value="" disabled>اختر النوع</option>
+              <option v-for="m in catalog" :key="m.id" :value="m.name">{{ m.name }}</option>
+            </select>
+            <input v-else v-model="f.make" placeholder="مرسيدس" required />
+            <NuxtLink to="/admin/catalog" class="mini-link"><i class="ti ti-settings"></i> إدارة الأنواع</NuxtLink>
+          </div>
+          <div class="frow">
+            <label>الموديل</label>
+            <select v-if="modelsOf.length" v-model="f.model" required>
+              <option value="" disabled>اختر الموديل</option>
+              <option v-for="mo in modelsOf" :key="mo.id" :value="mo.name">{{ mo.name }}</option>
+            </select>
+            <input v-else v-model="f.model" :placeholder="f.make ? 'اكتب الموديل' : 'اختر النوع أولاً'" required />
+          </div>
           <div class="frow"><label>السنة</label><input v-model.number="f.year" type="number" required /></div>
           <div class="frow"><label>الممشى (كم)</label><input v-model.number="f.mileage" type="number" required /></div>
           <div class="frow"><label>الوقود</label>
@@ -79,6 +94,9 @@ const { api, fileUrl } = useApi()
 const { fetchMe } = useAuth()
 
 const isEdit = computed(() => !!props.vehicleId)
+const catalog = ref([])
+const modelsOf = computed(() => catalog.value.find((m) => m.name === f.make)?.models || [])
+function onMakeChange() { f.model = '' }
 const media = ref([])
 const busy = ref(false)
 const uploading = ref(false)
@@ -128,6 +146,7 @@ async function save() {
 onMounted(async () => {
   const me = await fetchMe()
   if (!me) return navigateTo('/login')
+  catalog.value = await api('/dashboard/catalog').catch(() => [])
   if (isEdit.value) {
     const v = await api(`/dashboard/vehicles/${props.vehicleId}`).catch(() => null)
     if (v) {
@@ -152,4 +171,5 @@ onMounted(async () => {
 .gacts { position: absolute; inset: 0; background: rgba(0,0,0,.45); display: flex; align-items: center; justify-content: center; gap: 8px; opacity: 0; transition: .15s; }
 .gthumb:hover .gacts { opacity: 1; }
 .gacts button { width: 28px; height: 28px; border-radius: 7px; border: none; background: #fff; cursor: pointer; color: var(--ink); }
+.mini-link { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; color: var(--accent); margin-top: 5px; }
 </style>

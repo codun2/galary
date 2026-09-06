@@ -7,9 +7,9 @@
       <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1600&q=80" alt="" />
       <div class="ov"></div>
       <div class="in">
-        <span class="tag">معرض سيارات معتمد</span>
-        <h1>سيارتك القادمة تنتظرك في {{ settings.showroom_name || 'أوتو غاليري' }}</h1>
-        <p>{{ settings.about || 'تشكيلة مختارة من أفضل السيارات المفحوصة بأسعار تنافسية وضمان المعرض.' }}</p>
+        <span class="tag">{{ settings.hero_badge || 'معرض سيارات معتمد' }}</span>
+        <h1>{{ settings.hero_title || `سيارتك القادمة تنتظرك في ${settings.showroom_name || 'أوتو غاليري'}` }}</h1>
+        <p>{{ settings.hero_subtitle || settings.about || 'تشكيلة مختارة من أفضل السيارات المفحوصة بأسعار تنافسية وضمان المعرض.' }}</p>
         <div class="acts">
           <NuxtLink to="/cars" class="btn btn-accent btn-lg">تصفّح السيارات</NuxtLink>
           <a v-if="waLink" :href="waLink" target="_blank" class="btn btn-ghost btn-lg"><i class="ti ti-brand-whatsapp"></i> تواصل معنا</a>
@@ -19,7 +19,7 @@
 
     <!-- quick search (OpenLane-style card) -->
     <form class="searchcard" @submit.prevent="goSearch">
-      <div class="sc-head"><i class="ti ti-search"></i> ابحث عن سيارتك</div>
+      <div class="sc-head"><i class="ti ti-search"></i> {{ settings.search_title || 'ابحث عن سيارتك' }}</div>
       <div class="sc-grid">
         <div class="fld">
           <label>الماركة</label>
@@ -66,7 +66,7 @@
     <!-- featured -->
     <div class="sec">
       <div class="sec-head">
-        <div><h2>سيارات مميّزة</h2><p>أحدث ما وصل إلى معرضنا</p></div>
+        <div><h2>{{ settings.featured_title || 'سيارات مميّزة' }}</h2><p>{{ settings.featured_subtitle || 'أحدث ما وصل إلى معرضنا' }}</p></div>
         <NuxtLink to="/cars" class="link">عرض الكل ‹</NuxtLink>
       </div>
       <div v-if="pending" class="empty">جارِ التحميل…</div>
@@ -78,20 +78,20 @@
 
     <!-- why us -->
     <div class="sec" style="padding-top:0;">
-      <div class="sec-head" style="justify-content:center;"><h2>ليش {{ settings.showroom_name || 'أوتو غاليري' }}؟</h2></div>
+      <div class="sec-head" style="justify-content:center;"><h2>{{ settings.why_title || `ليش ${settings.showroom_name || 'أوتو غاليري'}؟` }}</h2></div>
       <div class="why">
-        <div class="w"><i class="ti ti-shield-check"></i><h4>سيارات مفحوصة</h4><p>كل سيارة تمرّ بفحص شامل قبل العرض.</p></div>
-        <div class="w"><i class="ti ti-tag"></i><h4>أسعار واضحة</h4><p>بلا مفاجآت — السعر المعروض هو السعر.</p></div>
-        <div class="w"><i class="ti ti-file-certificate"></i><h4>ضمان المعرض</h4><p>ضمان على المحرك والقير حسب السيارة.</p></div>
-        <div class="w"><i class="ti ti-headset"></i><h4>خدمة ما بعد البيع</h4><p>فريقنا معك حتى بعد الاستلام.</p></div>
+        <div class="w"><i class="ti ti-shield-check"></i><h4>{{ settings.why1_title || 'سيارات مفحوصة' }}</h4><p>{{ settings.why1_text || 'كل سيارة تمرّ بفحص شامل قبل العرض.' }}</p></div>
+        <div class="w"><i class="ti ti-tag"></i><h4>{{ settings.why2_title || 'أسعار واضحة' }}</h4><p>{{ settings.why2_text || 'بلا مفاجآت — السعر المعروض هو السعر.' }}</p></div>
+        <div class="w"><i class="ti ti-file-certificate"></i><h4>{{ settings.why3_title || 'ضمان المعرض' }}</h4><p>{{ settings.why3_text || 'ضمان على المحرك والقير حسب السيارة.' }}</p></div>
+        <div class="w"><i class="ti ti-headset"></i><h4>{{ settings.why4_title || 'خدمة ما بعد البيع' }}</h4><p>{{ settings.why4_text || 'فريقنا معك حتى بعد الاستلام.' }}</p></div>
       </div>
     </div>
 
     <!-- cta -->
     <div class="cta">
-      <h2>عندك سيارة تبي تبيعها؟</h2>
-      <p>نشتري سيارتك أو نعرضها في معرضنا — تواصل معنا اليوم.</p>
-      <NuxtLink to="/contact" class="btn btn-accent btn-lg">تواصل الآن</NuxtLink>
+      <h2>{{ settings.cta_title || 'عندك سيارة تبي تبيعها؟' }}</h2>
+      <p>{{ settings.cta_text || 'نشتري سيارتك أو نعرضها في معرضنا — تواصل معنا اليوم.' }}</p>
+      <NuxtLink to="/contact" class="btn btn-accent btn-lg">{{ settings.cta_button || 'تواصل الآن' }}</NuxtLink>
     </div>
 
     <SiteFooter />
