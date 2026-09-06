@@ -1,0 +1,6 @@
+backend/vendor/
+backend/.env
+backend/storage/app/public/uploads/
+frontend/node_modules/
+frontend/.nuxt/
+frontend/.output/
