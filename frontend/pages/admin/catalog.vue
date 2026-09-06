@@ -18,14 +18,34 @@
     <div class="mgrid">
       <div v-for="m in makes" :key="m.id" class="mcard">
         <div class="mhead">
-          <b><i class="ti ti-car"></i> {{ m.name }}</b>
-          <button class="act danger" title="حذف النوع" @click="delMake(m)"><i class="ti ti-trash"></i></button>
+          <template v-if="editMake?.id === m.id">
+            <div class="editrow">
+              <input v-model="editMake.name" @keyup.enter="saveMake" @keyup.esc="editMake = null" />
+              <button class="act ok" title="حفظ" @click="saveMake"><i class="ti ti-check"></i></button>
+              <button class="act" title="إلغاء" @click="editMake = null"><i class="ti ti-x"></i></button>
+            </div>
+          </template>
+          <template v-else>
+            <b><i class="ti ti-car"></i> {{ m.name }}</b>
+            <div>
+              <button class="act" title="تعديل الاسم" @click="editMake = { id: m.id, name: m.name }"><i class="ti ti-edit"></i></button>
+              <button class="act danger" title="حذف النوع" @click="delMake(m)"><i class="ti ti-trash"></i></button>
+            </div>
+          </template>
         </div>
         <div class="models">
-          <span v-for="mo in m.models" :key="mo.id" class="mo">
-            {{ mo.name }}
-            <i class="ti ti-x" @click="delModel(m, mo)"></i>
-          </span>
+          <template v-for="mo in m.models" :key="mo.id">
+            <span v-if="editModel?.id === mo.id" class="mo editing">
+              <input v-model="editModel.name" @keyup.enter="saveModel" @keyup.esc="editModel = null" />
+              <i class="ti ti-check ok" @click="saveModel"></i>
+              <i class="ti ti-x" @click="editModel = null"></i>
+            </span>
+            <span v-else class="mo">
+              {{ mo.name }}
+              <i class="ti ti-edit" @click="editModel = { id: mo.id, name: mo.name }"></i>
+              <i class="ti ti-x" @click="delModel(m, mo)"></i>
+            </span>
+          </template>
           <span v-if="!m.models.length" class="none">لا موديلات بعد</span>
         </div>
         <div class="addmo">
@@ -70,6 +90,8 @@ const { fetchMe } = useAuth()
 const makes = ref([])
 const brands = ref([])
 const newModels = reactive({})
+const editMake = ref(null)
+const editModel = ref(null)
 const nb = reactive({ name: '', logo_path: '', logo_url: '' })
 const newMake = ref('')
 const { confirmDlg } = useConfirm()
@@ -106,6 +128,24 @@ async function addMake() {
   try { await api('/dashboard/makes', { method: 'POST', body: { name: newMake.value.trim() } }); newMake.value = ''; await load() }
   catch (e) { alert(e?.data?.message || 'النوع موجود مسبقاً') }
   finally { busy.value = false }
+}
+async function saveMake() {
+  const name = editMake.value?.name?.trim()
+  if (!name) return
+  try {
+    await api(`/dashboard/makes/${editMake.value.id}`, { method: 'PUT', body: { name } })
+    editMake.value = null
+    await load()
+  } catch (e) { alert(e?.data?.message || 'الاسم مستخدم مسبقاً') }
+}
+async function saveModel() {
+  const name = editModel.value?.name?.trim()
+  if (!name) return
+  try {
+    await api(`/dashboard/models/${editModel.value.id}`, { method: 'PUT', body: { name } })
+    editModel.value = null
+    await load()
+  } catch (e) { alert(e?.data?.message || 'تعذّر التعديل') }
 }
 async function delMake(m) {
   if (!(await confirmDlg(`حذف نوع «${m.name}»؟`, 'سيتم حذف النوع وكل الموديلات التابعة له'))) return
@@ -147,6 +187,13 @@ onMounted(async () => {
 .mo i { font-size: 13px; color: var(--muted); cursor: pointer; }
 .mo i:hover { color: var(--accent); }
 .none { font-size: 12.5px; color: var(--muted); }
+.editrow { display: flex; gap: 6px; align-items: center; flex: 1; }
+.editrow input { padding: 7px 11px; font-size: 14px; font-weight: 700; }
+.act.ok { color: var(--green); }
+.mo.editing input { border: none; background: transparent; padding: 0; width: 90px; font-size: 13px; }
+.mo.editing input:focus { box-shadow: none; }
+.mo .ti-edit { font-size: 12px; }
+.mo .ok { color: var(--green); }
 .addmo { display: flex; gap: 8px; }
 .addmo input { flex: 1; padding: 8px 12px; font-size: 13px; }
 .blist { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; min-height: 40px; }

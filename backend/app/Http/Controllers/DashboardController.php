@@ -126,6 +126,17 @@ class DashboardController extends Controller
         return response()->json($make->load('models'), 201);
     }
 
+    public function updateMake(Request $request, \App\Models\Make $make)
+    {
+        $data = $request->validate(['name' => 'required|string|max:60|unique:makes,name,' . $make->id]);
+
+        // تحديث السيارات الحالية بالاسم الجديد للحفاظ على الربط
+        \App\Models\Vehicle::where('make', $make->name)->update(['make' => $data['name']]);
+        $make->update($data);
+
+        return response()->json(['message' => 'تم تعديل الاسم', 'make' => $make]);
+    }
+
     public function deleteMake(\App\Models\Make $make)
     {
         $make->delete();
@@ -139,6 +150,18 @@ class DashboardController extends Controller
         $model = $make->models()->firstOrCreate(['name' => $data['name']]);
 
         return response()->json($model, 201);
+    }
+
+    public function updateModel(Request $request, \App\Models\CarModel $carModel)
+    {
+        $data = $request->validate(['name' => 'required|string|max:80']);
+
+        \App\Models\Vehicle::where('make', $carModel->make->name)
+            ->where('model', $carModel->name)
+            ->update(['model' => $data['name']]);
+        $carModel->update($data);
+
+        return response()->json(['message' => 'تم تعديل الموديل', 'model' => $carModel]);
     }
 
     public function deleteModel(\App\Models\CarModel $carModel)

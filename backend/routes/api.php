@@ -51,8 +51,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/dashboard/catalog', [DashboardController::class, 'catalog']);
     Route::post('/dashboard/makes', [DashboardController::class, 'storeMake']);
+    Route::put('/dashboard/makes/{make}', [DashboardController::class, 'updateMake']);
     Route::delete('/dashboard/makes/{make}', [DashboardController::class, 'deleteMake']);
     Route::post('/dashboard/makes/{make}/models', [DashboardController::class, 'storeModel']);
+    Route::put('/dashboard/models/{carModel}', [DashboardController::class, 'updateModel']);
     Route::delete('/dashboard/models/{carModel}', [DashboardController::class, 'deleteModel']);
 
     Route::get('/dashboard/brands', [DashboardController::class, 'brands']);
