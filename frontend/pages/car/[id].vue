@@ -53,8 +53,8 @@
           </div>
           <div class="panel" style="margin-top:16px;">
             <h3 class="sec-t">{{ isEn ? (settings.showroom_name_en || 'Showroom') : (settings.showroom_name || 'المعرض') }}</h3>
-            <div class="cl" v-if="settings.address"><i class="ti ti-map-pin"></i> {{ settings.address }}</div>
-            <div class="cl" v-if="settings.hours"><i class="ti ti-clock"></i> {{ settings.hours }}</div>
+            <div class="cl" v-if="loc('address')"><i class="ti ti-map-pin"></i> {{ loc('address') }}</div>
+            <div class="cl" v-if="loc('hours')"><i class="ti ti-clock"></i> {{ loc('hours') }}</div>
             <div class="cl" style="border:none;"><i class="ti ti-shield-check"></i> {{ t('سيارات مفحوصة ومضمونة') }}</div>
           </div>
         </div>
@@ -69,7 +69,7 @@
 const route = useRoute()
 const { api, fileUrl } = useApi()
 const { settings, loadSettings, waLink } = useSettings()
-const { t, isEn } = useLang()
+const { t, isEn, loc } = useLang()
 
 const v = ref(null)
 const pending = ref(true)

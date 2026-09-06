@@ -20,7 +20,10 @@
         <div class="frow"><label>ساعات الدوام</label><input v-model="f.hours" /></div>
       </div>
       <div class="frow"><label>العنوان</label><input v-model="f.address" /></div>
+      <div class="frow"><label>العنوان بالإنجليزية</label><input v-model="f.address_en" dir="ltr" placeholder="Showrooms St., City" /></div>
+      <div class="frow"><label>ساعات الدوام بالإنجليزية</label><input v-model="f.hours_en" dir="ltr" placeholder="Sat–Thu · 9am – 9pm" /></div>
       <div class="frow"><label>نبذة عن المعرض</label><textarea v-model="f.about" rows="3"></textarea></div>
+      <div class="frow"><label>النبذة بالإنجليزية</label><textarea v-model="f.about_en" rows="3" dir="ltr" placeholder="A car showroom offering..."></textarea></div>
       <button class="btn btn-accent btn-lg" @click="save" :disabled="busy">{{ busy ? '...' : 'حفظ الإعدادات' }}</button>
     </div>
 

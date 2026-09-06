@@ -14,8 +14,8 @@
         <h5>تواصل</h5>
         <p v-if="settings.phone"><i class="ti ti-phone"></i> {{ settings.phone }}</p>
         <a v-if="waLink" :href="waLink" target="_blank"><i class="ti ti-brand-whatsapp"></i> واتساب</a>
-        <p v-if="settings.address"><i class="ti ti-map-pin"></i> {{ settings.address }}</p>
-        <p v-if="settings.hours"><i class="ti ti-clock"></i> {{ settings.hours }}</p>
+        <p v-if="settings.address"><i class="ti ti-map-pin"></i> {{ loc('address') }}</p>
+        <p v-if="settings.hours"><i class="ti ti-clock"></i> {{ loc('hours') }}</p>
       </div>
     </div>
     <div class="fbottom"><span>© 2026 {{ isEn ? (settings.showroom_name_en || 'Auto Gallery') : (settings.showroom_name || 'أوتو غاليري') }} — {{ t('جميع الحقوق محفوظة') }}</span></div>
@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-const { t, cms, isEn } = useLang()
+const { t, cms, isEn, loc } = useLang()
 const { settings, loadSettings, waLink } = useSettings()
 onMounted(loadSettings)
 </script>

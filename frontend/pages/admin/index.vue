@@ -50,8 +50,9 @@ async function load() {
   ;[stats.value, vehicles.value] = await Promise.all([api('/dashboard/stats'), api('/dashboard/vehicles')])
   pending.value = false
 }
+const { confirmDlg } = useConfirm()
 async function remove(v) {
-  if (!confirm(`حذف ${v.make} ${v.model}؟`)) return
+  if (!(await confirmDlg(`حذف ${v.make} ${v.model}؟`, 'سيتم حذف السيارة وكل صورها نهائياً'))) return
   await api(`/dashboard/vehicles/${v.id}`, { method: 'DELETE' })
   await load()
 }

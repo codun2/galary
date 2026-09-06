@@ -21,6 +21,7 @@
       </div>
     </aside>
     <main class="dmain"><slot /></main>
+    <ConfirmDialog />
   </div>
 </template>
 

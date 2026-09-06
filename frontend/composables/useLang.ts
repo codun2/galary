@@ -115,6 +115,9 @@ export function useLang() {
     return settings.value[key] || arFallback
   }
 
+  // قيمة إعداد حسب اللغة: بالإنجليزي يجرب key_en أولاً
+  const loc = (key: string) => (isEn.value ? (settings.value[key + '_en'] || settings.value[key] || '') : (settings.value[key] || ''))
+
   function toggleLang() {
     lang.value = isEn.value ? 'ar' : 'en'
   }
@@ -127,5 +130,5 @@ export function useLang() {
     },
   })
 
-  return { lang, isEn, t, cms, toggleLang }
+  return { lang, isEn, t, cms, loc, toggleLang }
 }

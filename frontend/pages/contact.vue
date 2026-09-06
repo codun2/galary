@@ -26,8 +26,8 @@
         <div class="panel" style="height:fit-content;">
           <div class="cl" v-if="settings.phone"><i class="ti ti-phone"></i><div><b>الهاتف</b><small>{{ settings.phone }}</small></div></div>
           <a class="cl" v-if="waLink" :href="waLink" target="_blank"><i class="ti ti-brand-whatsapp"></i><div><b>واتساب</b><small>راسلنا مباشرة</small></div></a>
-          <div class="cl" v-if="settings.address"><i class="ti ti-map-pin"></i><div><b>العنوان</b><small>{{ settings.address }}</small></div></div>
-          <div class="cl" style="border:none;" v-if="settings.hours"><i class="ti ti-clock"></i><div><b>الدوام</b><small>{{ settings.hours }}</small></div></div>
+          <div class="cl" v-if="settings.address"><i class="ti ti-map-pin"></i><div><b>العنوان</b><small>{{ loc('address') }}</small></div></div>
+          <div class="cl" style="border:none;" v-if="settings.hours"><i class="ti ti-clock"></i><div><b>الدوام</b><small>{{ loc('hours') }}</small></div></div>
         </div>
       </div>
     </div>

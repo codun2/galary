@@ -28,10 +28,10 @@
           </span>
           <span v-if="!m.models.length" class="none">لا موديلات بعد</span>
         </div>
-        <form class="addmo" @submit.prevent="addModel(m)">
-          <input v-model="m._new" placeholder="موديل جديد…" />
-          <button class="btn btn-out" :disabled="!m._new?.trim()"><i class="ti ti-plus"></i></button>
-        </form>
+        <div class="addmo">
+          <input v-model="newModels[m.id]" placeholder="موديل جديد…" @keyup.enter="addModel(m)" />
+          <button type="button" class="btn btn-out" @click="addModel(m)"><i class="ti ti-plus"></i></button>
+        </div>
       </div>
     </div>
 
@@ -69,8 +69,10 @@ const { fetchMe } = useAuth()
 
 const makes = ref([])
 const brands = ref([])
+const newModels = reactive({})
 const nb = reactive({ name: '', logo_path: '', logo_url: '' })
 const newMake = ref('')
+const { confirmDlg } = useConfirm()
 const pending = ref(true)
 const busy = ref(false)
 
@@ -95,7 +97,7 @@ async function addBrand() {
   await load()
 }
 async function delBrand(b) {
-  if (!confirm(`حذف شعار ${b.name}؟`)) return
+  if (!(await confirmDlg(`حذف شعار ${b.name}؟`, 'سيختفي من الشريط في الصفحة الرئيسية'))) return
   await api(`/dashboard/brands/${b.id}`, { method: 'DELETE' })
   await load()
 }
@@ -106,16 +108,23 @@ async function addMake() {
   finally { busy.value = false }
 }
 async function delMake(m) {
-  if (!confirm(`حذف "${m.name}" وكل موديلاته؟`)) return
+  if (!(await confirmDlg(`حذف نوع «${m.name}»؟`, 'سيتم حذف النوع وكل الموديلات التابعة له'))) return
   await api(`/dashboard/makes/${m.id}`, { method: 'DELETE' })
   await load()
 }
 async function addModel(m) {
-  await api(`/dashboard/makes/${m.id}/models`, { method: 'POST', body: { name: m._new.trim() } })
-  m._new = ''
-  await load()
+  const name = (newModels[m.id] || '').trim()
+  if (!name) return
+  try {
+    await api(`/dashboard/makes/${m.id}/models`, { method: 'POST', body: { name } })
+    newModels[m.id] = ''
+    await load()
+  } catch (e) {
+    alert(e?.data?.message || 'تعذّرت إضافة الموديل')
+  }
 }
 async function delModel(m, mo) {
+  if (!(await confirmDlg(`حذف موديل «${mo.name}»؟`))) return
   await api(`/dashboard/models/${mo.id}`, { method: 'DELETE' })
   await load()
 }
