@@ -2,11 +2,11 @@
   <div>
     <SiteHeader />
 
-    <div v-if="pending" class="empty">جارِ التحميل…</div>
-    <div v-else-if="!v" class="empty">لم يتم العثور على السيارة</div>
+    <div v-if="pending" class="empty">{{ t('جارِ التحميل…') }}</div>
+    <div v-else-if="!v" class="empty">{{ t('لم يتم العثور على السيارة') }}</div>
 
     <template v-else>
-      <NuxtLink to="/cars" class="back"><i class="ti ti-arrow-right"></i> رجوع للسيارات</NuxtLink>
+      <NuxtLink to="/cars" class="back"><i class="ti" :class="isEn ? 'ti-arrow-left' : 'ti-arrow-right'"></i> {{ t('رجوع للسيارات') }}</NuxtLink>
       <div class="vd">
         <div class="gal">
           <div class="main">
@@ -18,19 +18,19 @@
           </div>
 
           <div class="panel" style="margin-top:16px;">
-            <h3 class="sec-t">المواصفات</h3>
+            <h3 class="sec-t">{{ t('المواصفات') }}</h3>
             <div class="spec">
-              <div class="s"><small>الماركة</small><b>{{ v.make }}</b></div>
-              <div class="s"><small>الموديل</small><b>{{ v.model }}</b></div>
-              <div class="s"><small>السنة</small><b>{{ v.year }}</b></div>
-              <div class="s"><small>الممشى</small><b>{{ km }} كم</b></div>
-              <div class="s"><small>الوقود</small><b>{{ FUELS[v.fuel] }}</b></div>
-              <div class="s"><small>ناقل الحركة</small><b>{{ v.transmission === 'automatic' ? 'أوتوماتيك' : 'عادي' }}</b></div>
-              <div class="s" v-if="v.color"><small>اللون</small><b>{{ v.color }}</b></div>
-              <div class="s" v-if="v.drivetrain"><small>الدفع</small><b>{{ v.drivetrain }}</b></div>
+              <div class="s"><small>{{ t('الماركة') }}</small><b>{{ v.make }}</b></div>
+              <div class="s"><small>{{ t('الموديل') }}</small><b>{{ v.model }}</b></div>
+              <div class="s"><small>{{ t('السنة') }}</small><b>{{ v.year }}</b></div>
+              <div class="s"><small>{{ t('الممشى') }}</small><b>{{ km }} {{ t('كم') }}</b></div>
+              <div class="s"><small>{{ t('الوقود') }}</small><b>{{ t(FUELS[v.fuel]) }}</b></div>
+              <div class="s"><small>{{ t('ناقل الحركة') }}</small><b>{{ v.transmission === 'automatic' ? t('أوتوماتيك') : t('عادي') }}</b></div>
+              <div class="s" v-if="v.color"><small>{{ t('اللون') }}</small><b>{{ v.color }}</b></div>
+              <div class="s" v-if="v.drivetrain"><small>{{ t('الدفع') }}</small><b>{{ v.drivetrain }}</b></div>
             </div>
             <template v-if="v.features?.length">
-              <h3 class="sec-t" style="margin-top:20px;">المميزات</h3>
+              <h3 class="sec-t" style="margin-top:20px;">{{ t('المميزات') }}</h3>
               <div class="feats"><span v-for="ftr in v.features" :key="ftr">{{ ftr }}</span></div>
             </template>
             <p v-if="v.description" style="margin-top:16px; font-size:14px; color:#4A4F5A;">{{ v.description }}</p>
@@ -39,23 +39,23 @@
 
         <div>
           <div class="panel">
-            <span v-if="v.is_featured" class="pill pill-r" style="background:var(--accent); color:#fff;">مميّزة</span>
-            <span v-if="v.status === 'reserved'" class="pill pill-y">محجوزة</span>
+            <span v-if="v.is_featured" class="pill pill-r" style="background:var(--accent); color:#fff;">{{ t('مميّزة') }}</span>
+            <span v-if="v.status === 'reserved'" class="pill pill-y">{{ t('محجوزة') }}</span>
             <h1 style="font-size:24px; margin:12px 0 4px; font-weight:800;">{{ v.make }} {{ v.model }} — {{ v.year }}</h1>
-            <div class="page-sub" style="margin-bottom:14px;">{{ km }} كم · {{ FUELS[v.fuel] }} · {{ v.transmission === 'automatic' ? 'أوتوماتيك' : 'عادي' }}</div>
+            <div class="page-sub" style="margin-bottom:14px;">{{ km }} {{ t('كم') }} · {{ t(FUELS[v.fuel]) }} · {{ v.transmission === 'automatic' ? t('أوتوماتيك') : t('عادي') }}</div>
             <div class="price-big">${{ price }}</div>
-            <small style="color:var(--muted)">شامل ضمان المعرض</small>
+            <small style="color:var(--muted)">{{ t('شامل ضمان المعرض') }}</small>
             <div style="margin-top:18px; display:flex; flex-direction:column; gap:10px;">
-              <a v-if="waLink" :href="waText" target="_blank" class="btn btn-wa btn-block btn-lg"><i class="ti ti-brand-whatsapp"></i> تواصل عبر واتساب</a>
-              <a v-if="settings.phone" :href="`tel:${settings.phone.replace(/\\s/g,'')}`" class="btn btn-dark btn-block btn-lg"><i class="ti ti-phone"></i> اتصل بالمعرض</a>
-              <NuxtLink :to="`/contact?car=${v.id}`" class="btn btn-out btn-block"><i class="ti ti-message"></i> أرسل استفسار</NuxtLink>
+              <a v-if="waLink" :href="waText" target="_blank" class="btn btn-wa btn-block btn-lg"><i class="ti ti-brand-whatsapp"></i> {{ t('تواصل عبر واتساب') }}</a>
+              <a v-if="settings.phone" :href="`tel:${settings.phone.replace(/\\s/g,'')}`" class="btn btn-dark btn-block btn-lg"><i class="ti ti-phone"></i> {{ t('اتصل بالمعرض') }}</a>
+              <NuxtLink :to="`/contact?car=${v.id}`" class="btn btn-out btn-block"><i class="ti ti-message"></i> {{ t('أرسل استفسار') }}</NuxtLink>
             </div>
           </div>
           <div class="panel" style="margin-top:16px;">
-            <h3 class="sec-t">{{ settings.showroom_name || 'المعرض' }}</h3>
+            <h3 class="sec-t">{{ isEn ? (settings.showroom_name_en || 'Showroom') : (settings.showroom_name || 'المعرض') }}</h3>
             <div class="cl" v-if="settings.address"><i class="ti ti-map-pin"></i> {{ settings.address }}</div>
             <div class="cl" v-if="settings.hours"><i class="ti ti-clock"></i> {{ settings.hours }}</div>
-            <div class="cl" style="border:none;"><i class="ti ti-shield-check"></i> سيارات مفحوصة ومضمونة</div>
+            <div class="cl" style="border:none;"><i class="ti ti-shield-check"></i> {{ t('سيارات مفحوصة ومضمونة') }}</div>
           </div>
         </div>
       </div>
@@ -69,6 +69,7 @@
 const route = useRoute()
 const { api, fileUrl } = useApi()
 const { settings, loadSettings, waLink } = useSettings()
+const { t, isEn } = useLang()
 
 const v = ref(null)
 const pending = ref(true)

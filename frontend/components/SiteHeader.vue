@@ -2,22 +2,24 @@
   <div class="nav">
     <NuxtLink to="/" class="brand">
       <div class="logo"><i class="ti ti-car"></i></div>
-      <div><div class="bt">{{ settings.showroom_name || 'أوتو غاليري' }}</div><div class="bs">AUTO GALLERY</div></div>
+      <div><div class="bt">{{ isEn ? (settings.showroom_name_en || 'Auto Gallery') : (settings.showroom_name || 'أوتو غاليري') }}</div><div class="bs">AUTO GALLERY</div></div>
     </NuxtLink>
     <div class="links">
-      <NuxtLink to="/">الرئيسية</NuxtLink>
-      <NuxtLink to="/cars">سياراتنا</NuxtLink>
-      <NuxtLink to="/contact">تواصل</NuxtLink>
+      <NuxtLink to="/">{{ t('الرئيسية') }}</NuxtLink>
+      <NuxtLink to="/cars">{{ t('سياراتنا') }}</NuxtLink>
+      <NuxtLink to="/contact">{{ t('تواصل') }}</NuxtLink>
     </div>
     <div class="right">
       <span v-if="settings.phone" class="phone"><i class="ti ti-phone"></i> {{ settings.phone }}</span>
-      <NuxtLink to="/login" class="btn btn-accent">دخول المعرض</NuxtLink>
+      <button class="langbtn" @click="toggleLang">{{ isEn ? 'عربي' : 'EN' }}</button>
+      <NuxtLink to="/login" class="btn btn-accent">{{ t('دخول المعرض') }}</NuxtLink>
     </div>
   </div>
 </template>
 
 <script setup>
 const { settings, loadSettings } = useSettings()
+const { t, isEn, toggleLang } = useLang()
 onMounted(loadSettings)
 </script>
 
@@ -31,5 +33,7 @@ onMounted(loadSettings)
 .links a:hover { color: #fff; }
 .right { display: flex; align-items: center; gap: 14px; }
 .phone { color: #C3C8D2; font-size: 14px; display: flex; align-items: center; gap: 6px; }
+.langbtn { font-family: inherit; background: transparent; border: 1px solid #3A3F4A; color: #fff; font-size: 13px; padding: 7px 14px; border-radius: 9px; cursor: pointer; }
+.langbtn:hover { background: var(--ink-2); }
 @media (max-width: 820px) { .links, .phone { display: none; } }
 </style>

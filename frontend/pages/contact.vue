@@ -1,25 +1,25 @@
 <template>
   <div>
     <SiteHeader />
-    <div class="phead center"><h1>تواصل معنا</h1><p>فريقنا جاهز لمساعدتك في اختيار سيارتك</p></div>
+    <div class="phead center"><h1>{{ t('تواصل معنا') }}</h1><p>فريقنا جاهز لمساعدتك في اختيار سيارتك</p></div>
 
     <div class="wrap">
       <div class="cgrid">
         <div class="panel">
           <div v-if="sent" class="ok-box">
             <i class="ti ti-circle-check" style="font-size:34px; display:block; margin-bottom:8px;"></i>
-            وصلنا استفسارك — سنتواصل معك قريباً.
+            {{ t('وصلنا استفسارك — سنتواصل معك قريباً') }}
           </div>
           <template v-else>
-            <h3 class="sec-t">أرسل استفسارك</h3>
+            <h3 class="sec-t">{{ t('أرسل استفسار') }}</h3>
             <div v-if="error" class="err">{{ error }}</div>
             <div class="g2">
-              <div class="frow"><label>الاسم</label><input v-model="f.name" required /></div>
-              <div class="frow"><label>الهاتف</label><input v-model="f.phone" placeholder="0599..." required /></div>
+              <div class="frow"><label>{{ t('الاسم') }}</label><input v-model="f.name" required /></div>
+              <div class="frow"><label>{{ t('رقم الهاتف') }}</label><input v-model="f.phone" placeholder="0599..." required /></div>
             </div>
-            <div class="frow"><label>السيارة المهتم بها</label><input v-model="f.subject" placeholder="مثال: مرسيدس GLC" /></div>
-            <div class="frow"><label>رسالتك</label><textarea v-model="f.message" rows="4"></textarea></div>
-            <button class="btn btn-accent btn-block btn-lg" @click="send" :disabled="busy || !f.name || !f.phone">إرسال</button>
+            <div class="frow"><label>{{ isEn ? 'Car you are interested in' : 'السيارة المهتم بها' }}</label><input v-model="f.subject" placeholder="مثال: مرسيدس GLC" /></div>
+            <div class="frow"><label>{{ t('رسالتك') }}</label><textarea v-model="f.message" rows="4"></textarea></div>
+            <button class="btn btn-accent btn-block btn-lg" @click="send" :disabled="busy || !f.name || !f.phone">{{ t('إرسال') }}</button>
           </template>
         </div>
 
@@ -37,6 +37,7 @@
 </template>
 
 <script setup>
+const { t, isEn } = useLang()
 const { api } = useApi()
 const { settings, loadSettings, waLink } = useSettings()
 const route = useRoute()

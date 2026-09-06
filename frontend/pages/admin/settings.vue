@@ -14,6 +14,7 @@
     <div v-show="tab === 'info'" class="panel" style="max-width:720px;">
       <div class="g2">
         <div class="frow"><label>اسم المعرض</label><input v-model="f.showroom_name" /></div>
+        <div class="frow"><label>اسم المعرض بالإنجليزية</label><input v-model="f.showroom_name_en" dir="ltr" placeholder="Auto Gallery" /></div>
         <div class="frow"><label>الهاتف</label><input v-model="f.phone" /></div>
         <div class="frow"><label>واتساب (بالصيغة الدولية)</label><input v-model="f.whatsapp" placeholder="9705..." dir="ltr" /></div>
         <div class="frow"><label>ساعات الدوام</label><input v-model="f.hours" /></div>
@@ -27,10 +28,20 @@
     <div v-show="tab === 'texts'" style="max-width:760px;">
       <div class="panel" v-for="grp in TEXT_GROUPS" :key="grp.title" style="margin-bottom:16px;">
         <h3 class="sec-t">{{ grp.title }}</h3>
-        <div v-for="fld in grp.fields" :key="fld.key" class="frow">
+        <div v-for="fld in grp.fields" :key="fld.key" class="frow dual">
           <label>{{ fld.label }}</label>
-          <textarea v-if="fld.long" v-model="f[fld.key]" rows="2"></textarea>
-          <input v-else v-model="f[fld.key]" />
+          <div class="pair">
+            <div>
+              <small>عربي</small>
+              <textarea v-if="fld.long" v-model="f[fld.key]" rows="2"></textarea>
+              <input v-else v-model="f[fld.key]" />
+            </div>
+            <div>
+              <small>English</small>
+              <textarea v-if="fld.long" v-model="f[fld.key + '_en']" rows="2" dir="ltr"></textarea>
+              <input v-else v-model="f[fld.key + '_en']" dir="ltr" />
+            </div>
+          </div>
         </div>
       </div>
       <button class="btn btn-accent btn-lg" @click="save" :disabled="busy">{{ busy ? '...' : 'حفظ النصوص' }}</button>
@@ -74,8 +85,9 @@ const TEXT_GROUPS = [
   ]},
 ]
 
-const ALL_KEYS = ['showroom_name', 'phone', 'whatsapp', 'address', 'hours', 'about',
+const BASE_KEYS = ['showroom_name', 'phone', 'whatsapp', 'address', 'hours', 'about',
   ...TEXT_GROUPS.flatMap((g) => g.fields.map((x) => x.key))]
+const ALL_KEYS = [...BASE_KEYS, ...BASE_KEYS.map((k) => k + '_en')]
 const f = reactive(Object.fromEntries(ALL_KEYS.map((k) => [k, ''])))
 
 async function save() {
@@ -100,4 +112,7 @@ onMounted(async () => {
 .tabs { display: flex; gap: 8px; margin-bottom: 18px; }
 .tab { font-family: inherit; padding: 9px 18px; border-radius: 22px; font-size: 13.5px; cursor: pointer; border: 1px solid var(--line); background: #fff; display: inline-flex; align-items: center; gap: 7px; }
 .tab.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.pair small { display: block; font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+@media (max-width: 700px) { .pair { grid-template-columns: 1fr; } }
 </style>

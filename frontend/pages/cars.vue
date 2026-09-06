@@ -1,38 +1,38 @@
 <template>
   <div>
     <SiteHeader />
-    <div class="phead"><h1>سياراتنا</h1><p>كل السيارات المتوفّرة في المعرض</p></div>
+    <div class="phead"><h1>{{ t('سياراتنا') }}</h1><p>{{ t('كل السيارات المتوفّرة في المعرض') }}</p></div>
 
     <div class="listwrap">
       <aside class="filters">
-        <h3>تصفية النتائج</h3>
-        <div class="frow"><label>بحث</label><input v-model="f.search" placeholder="ماركة أو موديل" @keyup.enter="load" /></div>
-        <div class="frow"><label>الماركة</label>
-          <select v-model="f.make"><option value="">الكل</option><option v-for="m in makes" :key="m" :value="m">{{ m }}</option></select>
+        <h3>{{ t('تصفية النتائج') }}</h3>
+        <div class="frow"><label>{{ t('بحث') }}</label><input v-model="f.search" :placeholder="t('ماركة أو موديل')" @keyup.enter="load" /></div>
+        <div class="frow"><label>{{ t('الماركة') }}</label>
+          <select v-model="f.make"><option value="">{{ t('الكل') }}</option><option v-for="m in makes" :key="m" :value="m">{{ m }}</option></select>
         </div>
-        <div class="frow"><label>الوقود</label>
-          <select v-model="f.fuel"><option value="">الكل</option><option value="petrol">بنزين</option><option value="diesel">ديزل</option><option value="hybrid">هايبرد</option><option value="electric">كهرباء</option></select>
+        <div class="frow"><label>{{ t('الوقود') }}</label>
+          <select v-model="f.fuel"><option value="">{{ t('الكل') }}</option><option value="petrol">{{ t('بنزين') }}</option><option value="diesel">{{ t('ديزل') }}</option><option value="hybrid">{{ t('هايبرد') }}</option><option value="electric">{{ t('كهرباء') }}</option></select>
         </div>
-        <div class="frow"><label>ناقل الحركة</label>
-          <select v-model="f.transmission"><option value="">الكل</option><option value="automatic">أوتوماتيك</option><option value="manual">عادي</option></select>
+        <div class="frow"><label>{{ t('ناقل الحركة') }}</label>
+          <select v-model="f.transmission"><option value="">{{ t('الكل') }}</option><option value="automatic">{{ t('أوتوماتيك') }}</option><option value="manual">{{ t('عادي') }}</option></select>
         </div>
-        <div class="frow"><label>السنة من</label><input v-model="f.year_min" type="number" placeholder="2020" /></div>
-        <div class="frow"><label>أقصى سعر ($)</label><input v-model="f.price_max" type="number" placeholder="60000" /></div>
-        <button class="btn btn-dark btn-block" @click="load">تطبيق</button>
-        <button class="btn btn-out btn-block" style="margin-top:8px;" @click="reset">مسح</button>
+        <div class="frow"><label>{{ t('السنة من') }}</label><input v-model="f.year_min" type="number" placeholder="2020" /></div>
+        <div class="frow"><label>{{ t('أقصى سعر ($)') }}</label><input v-model="f.price_max" type="number" placeholder="60000" /></div>
+        <button class="btn btn-dark btn-block" @click="load">{{ t('تطبيق') }}</button>
+        <button class="btn btn-out btn-block" style="margin-top:8px;" @click="reset">{{ t('مسح') }}</button>
       </aside>
 
       <div>
         <div class="listbar">
-          <span>{{ total }} سيارة</span>
+          <span>{{ total }} {{ t('سيارة') }}</span>
           <select v-model="f.sort" @change="load" style="width:auto;">
-            <option value="latest">الأحدث</option>
-            <option value="price_asc">السعر: الأقل</option>
-            <option value="price_desc">السعر: الأعلى</option>
+            <option value="latest">{{ t('الأحدث') }}</option>
+            <option value="price_asc">{{ t('السعر: الأقل') }}</option>
+            <option value="price_desc">{{ t('السعر: الأعلى') }}</option>
           </select>
         </div>
-        <div v-if="pending" class="empty">جارِ التحميل…</div>
-        <div v-else-if="!items.length" class="empty">لا توجد نتائج مطابقة</div>
+        <div v-if="pending" class="empty">{{ t('جارِ التحميل…') }}</div>
+        <div v-else-if="!items.length" class="empty">{{ t('لا توجد نتائج مطابقة') }}</div>
         <div v-else class="grid">
           <CarCard v-for="v in items" :key="v.id" :v="v" />
         </div>
@@ -46,6 +46,7 @@
 <script setup>
 const { api } = useApi()
 const route = useRoute()
+const { t } = useLang()
 
 const items = ref([])
 const total = ref(0)

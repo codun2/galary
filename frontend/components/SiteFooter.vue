@@ -2,8 +2,8 @@
   <footer class="footer">
     <div class="fcols">
       <div>
-        <div class="brand"><div class="logo"><i class="ti ti-car"></i></div><b>{{ settings.showroom_name || 'أوتو غاليري' }}</b></div>
-        <p class="about">{{ settings.footer_text || settings.about || 'معرض سيارات يقدّم تشكيلة مختارة من السيارات المفحوصة.' }}</p>
+        <div class="brand"><div class="logo"><i class="ti ti-car"></i></div><b>{{ isEn ? (settings.showroom_name_en || 'Auto Gallery') : (settings.showroom_name || 'أوتو غاليري') }}</b></div>
+        <p class="about">{{ cms('footer_text', 'معرض سيارات يقدّم تشكيلة مختارة من السيارات المفحوصة.') }}</p>
       </div>
       <div>
         <h5>روابط</h5>
@@ -18,11 +18,12 @@
         <p v-if="settings.hours"><i class="ti ti-clock"></i> {{ settings.hours }}</p>
       </div>
     </div>
-    <div class="fbottom"><span>© 2026 {{ settings.showroom_name || 'أوتو غاليري' }} — جميع الحقوق محفوظة</span></div>
+    <div class="fbottom"><span>© 2026 {{ isEn ? (settings.showroom_name_en || 'Auto Gallery') : (settings.showroom_name || 'أوتو غاليري') }} — {{ t('جميع الحقوق محفوظة') }}</span></div>
   </footer>
 </template>
 
 <script setup>
+const { t, cms, isEn } = useLang()
 const { settings, loadSettings, waLink } = useSettings()
 onMounted(loadSettings)
 </script>

@@ -1,8 +1,8 @@
 <template>
   <NuxtLink :to="`/car/${v.id}`" class="card">
     <div class="ph">
-      <span v-if="v.is_featured" class="tag">مميّزة</span>
-      <span v-if="v.status === 'reserved'" class="tag res">محجوزة</span>
+      <span v-if="v.is_featured" class="tag">{{ t('مميّزة') }}</span>
+      <span v-if="v.status === 'reserved'" class="tag res">{{ t('محجوزة') }}</span>
       <img v-if="cover" :src="cover" alt="" loading="lazy" />
       <i v-else class="ti ti-car"></i>
     </div>
@@ -10,12 +10,12 @@
       <h3>{{ v.make }} {{ v.model }}</h3>
       <div class="meta">
         <span><i class="ti ti-calendar"></i> {{ v.year }}</span>
-        <span><i class="ti ti-road"></i> {{ km }} كم</span>
-        <span><i class="ti ti-gas-station"></i> {{ FUELS[v.fuel] || v.fuel }}</span>
+        <span><i class="ti ti-road"></i> {{ km }} {{ t('كم') }}</span>
+        <span><i class="ti ti-gas-station"></i> {{ t(FUELS[v.fuel] || v.fuel) }}</span>
       </div>
       <div class="ft">
         <span class="price">${{ price }}</span>
-        <span class="more">التفاصيل ‹</span>
+        <span class="more">{{ t('التفاصيل ‹') }}</span>
       </div>
     </div>
   </NuxtLink>
@@ -24,6 +24,7 @@
 <script setup>
 const props = defineProps({ v: { type: Object, required: true } })
 const { fileUrl } = useApi()
+const { t } = useLang()
 
 const FUELS = { petrol: 'بنزين', diesel: 'ديزل', hybrid: 'هايبرد', electric: 'كهرباء' }
 const km = computed(() => Number(props.v.mileage).toLocaleString('en-US'))

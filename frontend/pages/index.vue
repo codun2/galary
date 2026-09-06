@@ -7,70 +7,70 @@
       <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1600&q=80" alt="" />
       <div class="ov"></div>
       <div class="in">
-        <span class="tag">{{ settings.hero_badge || 'معرض سيارات معتمد' }}</span>
-        <h1>{{ settings.hero_title || `سيارتك القادمة تنتظرك في ${settings.showroom_name || 'أوتو غاليري'}` }}</h1>
-        <p>{{ settings.hero_subtitle || settings.about || 'تشكيلة مختارة من أفضل السيارات المفحوصة بأسعار تنافسية وضمان المعرض.' }}</p>
+        <span class="tag">{{ cms('hero_badge', 'معرض سيارات معتمد') }}</span>
+        <h1>{{ cms('hero_title', 'سيارتك القادمة تنتظرك في أوتو غاليري') }}</h1>
+        <p>{{ cms('hero_subtitle', 'تشكيلة مختارة من أفضل السيارات المفحوصة بأسعار تنافسية وضمان المعرض.') }}</p>
         <div class="acts">
-          <NuxtLink to="/cars" class="btn btn-accent btn-lg">تصفّح السيارات</NuxtLink>
-          <a v-if="waLink" :href="waLink" target="_blank" class="btn btn-ghost btn-lg"><i class="ti ti-brand-whatsapp"></i> تواصل معنا</a>
+          <NuxtLink to="/cars" class="btn btn-accent btn-lg">{{ t('تصفّح السيارات') }}</NuxtLink>
+          <a v-if="waLink" :href="waLink" target="_blank" class="btn btn-ghost btn-lg"><i class="ti ti-brand-whatsapp"></i> {{ t('تواصل معنا') }}</a>
         </div>
       </div>
     </div>
 
     <!-- quick search (OpenLane-style card) -->
     <form class="searchcard" @submit.prevent="goSearch">
-      <div class="sc-head"><i class="ti ti-search"></i> {{ settings.search_title || 'ابحث عن سيارتك' }}</div>
+      <div class="sc-head"><i class="ti ti-search"></i> {{ cms('search_title', 'ابحث عن سيارتك') }}</div>
       <div class="sc-grid">
         <div class="fld">
-          <label>الماركة</label>
+          <label>{{ t('الماركة') }}</label>
           <select v-model="q.make" @change="q.model = ''">
-            <option value="">كل الماركات</option>
+            <option value="">{{ t('كل الماركات') }}</option>
             <option v-for="m in facets.makes" :key="m.make" :value="m.make">{{ m.make }}</option>
           </select>
         </div>
         <div class="fld">
-          <label>الموديل</label>
+          <label>{{ t('الموديل') }}</label>
           <select v-model="q.model" :disabled="!q.make">
-            <option value="">{{ q.make ? 'كل الموديلات' : 'اختر الماركة أولاً' }}</option>
+            <option value="">{{ q.make ? t('كل الموديلات') : t('اختر الماركة أولاً') }}</option>
             <option v-for="mo in modelsOf" :key="mo" :value="mo">{{ mo }}</option>
           </select>
         </div>
         <div class="fld">
-          <label>الوقود</label>
+          <label>{{ t('الوقود') }}</label>
           <select v-model="q.fuel">
-            <option value="">الكل</option><option value="petrol">بنزين</option><option value="diesel">ديزل</option><option value="hybrid">هايبرد</option><option value="electric">كهرباء</option>
+            <option value="">{{ t('الكل') }}</option><option value="petrol">{{ t('بنزين') }}</option><option value="diesel">{{ t('ديزل') }}</option><option value="hybrid">{{ t('هايبرد') }}</option><option value="electric">{{ t('كهرباء') }}</option>
           </select>
         </div>
         <div class="fld">
-          <label>السنة من</label>
-          <select v-model="q.year_min"><option value="">أي سنة</option><option v-for="y in facets.years" :key="y" :value="y">{{ y }}</option></select>
+          <label>{{ t('السنة من') }}</label>
+          <select v-model="q.year_min"><option value="">{{ t('أي سنة') }}</option><option v-for="y in facets.years" :key="y" :value="y">{{ y }}</option></select>
         </div>
         <div class="fld">
-          <label>ناقل الحركة</label>
-          <select v-model="q.transmission"><option value="">الكل</option><option value="automatic">أوتوماتيك</option><option value="manual">عادي</option></select>
+          <label>{{ t('ناقل الحركة') }}</label>
+          <select v-model="q.transmission"><option value="">{{ t('الكل') }}</option><option value="automatic">{{ t('أوتوماتيك') }}</option><option value="manual">{{ t('عادي') }}</option></select>
         </div>
         <div class="fld">
-          <label>الممشى حتى</label>
+          <label>{{ t('الممشى حتى') }}</label>
           <select v-model="q.mileage_max">
-            <option value="">أي ممشى</option><option value="30000">30,000 كم</option><option value="60000">60,000 كم</option><option value="100000">100,000 كم</option><option value="150000">150,000 كم</option>
+            <option value="">{{ t('أي ممشى') }}</option><option value="30000">30,000 {{ t('كم') }}</option><option value="60000">60,000 {{ t('كم') }}</option><option value="100000">100,000 {{ t('كم') }}</option><option value="150000">150,000 {{ t('كم') }}</option>
           </select>
         </div>
       </div>
       <button class="btn btn-accent btn-lg btn-block sc-show">
         <i class="ti ti-car"></i>
-        {{ counting ? '…' : `عرض ${matchCount} ${carWord}` }}
+        {{ counting ? '…' : (isEn ? `Show ${matchCount} ${matchCount === 1 ? 'vehicle' : 'vehicles'}` : `عرض ${matchCount} ${carWord}`) }}
       </button>
-      <NuxtLink to="/cars" class="btn btn-out btn-block sc-adv">بحث متقدّم</NuxtLink>
+      <NuxtLink to="/cars" class="btn btn-out btn-block sc-adv">{{ t('بحث متقدّم') }}</NuxtLink>
     </form>
 
     <!-- featured -->
     <div class="sec">
       <div class="sec-head">
-        <div><h2>{{ settings.featured_title || 'سيارات مميّزة' }}</h2><p>{{ settings.featured_subtitle || 'أحدث ما وصل إلى معرضنا' }}</p></div>
-        <NuxtLink to="/cars" class="link">عرض الكل ‹</NuxtLink>
+        <div><h2>{{ cms('featured_title', 'سيارات مميّزة') }}</h2><p>{{ cms('featured_subtitle', 'أحدث ما وصل إلى معرضنا') }}</p></div>
+        <NuxtLink to="/cars" class="link">{{ t('عرض الكل ‹') }}</NuxtLink>
       </div>
-      <div v-if="pending" class="empty">جارِ التحميل…</div>
-      <div v-else-if="!cars.length" class="empty">لا توجد سيارات معروضة حالياً</div>
+      <div v-if="pending" class="empty">{{ t('جارِ التحميل…') }}</div>
+      <div v-else-if="!cars.length" class="empty">{{ t('لا توجد سيارات معروضة حالياً') }}</div>
       <div v-else class="grid">
         <CarCard v-for="v in cars" :key="v.id" :v="v" />
       </div>
@@ -78,20 +78,20 @@
 
     <!-- why us -->
     <div class="sec" style="padding-top:0;">
-      <div class="sec-head" style="justify-content:center;"><h2>{{ settings.why_title || `ليش ${settings.showroom_name || 'أوتو غاليري'}؟` }}</h2></div>
+      <div class="sec-head" style="justify-content:center;"><h2>{{ cms('why_title', 'ليش أوتو غاليري؟') }}</h2></div>
       <div class="why">
-        <div class="w"><i class="ti ti-shield-check"></i><h4>{{ settings.why1_title || 'سيارات مفحوصة' }}</h4><p>{{ settings.why1_text || 'كل سيارة تمرّ بفحص شامل قبل العرض.' }}</p></div>
-        <div class="w"><i class="ti ti-tag"></i><h4>{{ settings.why2_title || 'أسعار واضحة' }}</h4><p>{{ settings.why2_text || 'بلا مفاجآت — السعر المعروض هو السعر.' }}</p></div>
-        <div class="w"><i class="ti ti-file-certificate"></i><h4>{{ settings.why3_title || 'ضمان المعرض' }}</h4><p>{{ settings.why3_text || 'ضمان على المحرك والقير حسب السيارة.' }}</p></div>
-        <div class="w"><i class="ti ti-headset"></i><h4>{{ settings.why4_title || 'خدمة ما بعد البيع' }}</h4><p>{{ settings.why4_text || 'فريقنا معك حتى بعد الاستلام.' }}</p></div>
+        <div class="w"><i class="ti ti-shield-check"></i><h4>{{ cms('why1_title') || 'سيارات مفحوصة' }}</h4><p>{{ cms('why1_text') || 'كل سيارة تمرّ بفحص شامل قبل العرض.' }}</p></div>
+        <div class="w"><i class="ti ti-tag"></i><h4>{{ cms('why2_title') || 'أسعار واضحة' }}</h4><p>{{ cms('why2_text') || 'بلا مفاجآت — السعر المعروض هو السعر.' }}</p></div>
+        <div class="w"><i class="ti ti-file-certificate"></i><h4>{{ cms('why3_title') || 'ضمان المعرض' }}</h4><p>{{ cms('why3_text') || 'ضمان على المحرك والقير حسب السيارة.' }}</p></div>
+        <div class="w"><i class="ti ti-headset"></i><h4>{{ cms('why4_title') || 'خدمة ما بعد البيع' }}</h4><p>{{ cms('why4_text') || 'فريقنا معك حتى بعد الاستلام.' }}</p></div>
       </div>
     </div>
 
     <!-- cta -->
     <div class="cta">
-      <h2>{{ settings.cta_title || 'عندك سيارة تبي تبيعها؟' }}</h2>
-      <p>{{ settings.cta_text || 'نشتري سيارتك أو نعرضها في معرضنا — تواصل معنا اليوم.' }}</p>
-      <NuxtLink to="/contact" class="btn btn-accent btn-lg">{{ settings.cta_button || 'تواصل الآن' }}</NuxtLink>
+      <h2>{{ cms('cta_title', 'عندك سيارة تبي تبيعها؟') }}</h2>
+      <p>{{ cms('cta_text', 'نشتري سيارتك أو نعرضها في معرضنا — تواصل معنا اليوم.') }}</p>
+      <NuxtLink to="/contact" class="btn btn-accent btn-lg">{{ cms('cta_button', 'تواصل الآن') }}</NuxtLink>
     </div>
 
     <SiteFooter />
@@ -101,6 +101,7 @@
 <script setup>
 const { api } = useApi()
 const { settings, loadSettings, waLink } = useSettings()
+const { t, cms, isEn } = useLang()
 
 const cars = ref([])
 const pending = ref(true)

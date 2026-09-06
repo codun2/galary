@@ -99,7 +99,10 @@ class DashboardController extends Controller
     public function saveSettings(Request $request)
     {
         $rules = [];
-        foreach (self::SETTING_KEYS as $k) $rules[$k] = 'nullable|string|max:1000';
+        foreach (self::SETTING_KEYS as $k) {
+            $rules[$k] = 'nullable|string|max:1000';
+            $rules[$k . '_en'] = 'nullable|string|max:1000';   // النسخة الإنجليزية لكل نص
+        }
         $data = $request->validate($rules);
 
         foreach ($data as $k => $v) {
