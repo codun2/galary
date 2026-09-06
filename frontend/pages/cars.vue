@@ -51,9 +51,10 @@ const items = ref([])
 const total = ref(0)
 const pending = ref(true)
 const f = reactive({
-  search: '', make: route.query.make || '', fuel: '',
-  transmission: route.query.transmission || '',
+  search: '', make: route.query.make || '', model: route.query.model || '',
+  fuel: route.query.fuel || '', transmission: route.query.transmission || '',
   year_min: route.query.year_min || '', price_max: route.query.price_max || '',
+  mileage_max: route.query.mileage_max || '',
   sort: 'latest',
 })
 const makes = ref([])

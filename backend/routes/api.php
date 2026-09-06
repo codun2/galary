@@ -20,6 +20,7 @@ Route::get('/health', function () {
 
 // ---- الموقع العام (بلا تسجيل) ----
 Route::get('/site/settings', [SiteController::class, 'settings']);
+Route::get('/site/facets', [SiteController::class, 'facets']);
 Route::get('/site/vehicles', [SiteController::class, 'vehicles']);
 Route::get('/site/vehicles/featured', [SiteController::class, 'featured']);
 Route::get('/site/vehicles/{vehicle}', [SiteController::class, 'show']);

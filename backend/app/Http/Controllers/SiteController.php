@@ -17,11 +17,12 @@ class SiteController extends Controller
         if ($s = $request->input('search')) {
             $q->where(fn ($w) => $w->where('make', 'like', "%$s%")->orWhere('model', 'like', "%$s%"));
         }
-        foreach (['make', 'fuel', 'transmission'] as $f) {
+        foreach (['make', 'model', 'fuel', 'transmission'] as $f) {
             if ($request->filled($f)) $q->where($f, $request->input($f));
         }
         if ($request->filled('year_min')) $q->where('year', '>=', $request->input('year_min'));
         if ($request->filled('price_max')) $q->where('price', '<=', $request->input('price_max'));
+        if ($request->filled('mileage_max')) $q->where('mileage', '<=', $request->input('mileage_max'));
 
         match ($request->input('sort', 'latest')) {
             'price_asc' => $q->orderBy('price'),
@@ -52,6 +53,22 @@ class SiteController extends Controller
     public function settings()
     {
         return response()->json(Setting::all_map());
+    }
+
+    /** قوائم البحث: الماركات وموديلاتها وسنواتها (من المخزون الفعلي) */
+    public function facets()
+    {
+        $rows = Vehicle::whereIn('status', ['available', 'reserved'])
+            ->get(['make', 'model', 'year']);
+
+        return response()->json([
+            'makes' => $rows->groupBy('make')->map(fn ($g, $make) => [
+                'make' => $make,
+                'models' => $g->pluck('model')->unique()->values(),
+            ])->values(),
+            'years' => $rows->pluck('year')->unique()->sortDesc()->values(),
+            'total' => $rows->count(),
+        ]);
     }
 
     /** استفسار زبون — يُحفظ للوحة المعرض */
