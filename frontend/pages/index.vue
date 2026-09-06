@@ -63,6 +63,9 @@
       <NuxtLink to="/cars" class="btn btn-out btn-block sc-adv">{{ t('بحث متقدّم') }}</NuxtLink>
     </form>
 
+    <!-- brand logos strip -->
+    <BrandStrip />
+
     <!-- featured -->
     <div class="sec">
       <div class="sec-head">

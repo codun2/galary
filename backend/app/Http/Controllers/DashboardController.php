@@ -148,6 +148,31 @@ class DashboardController extends Controller
         return response()->json(['message' => 'تم حذف الموديل']);
     }
 
+    // ---- شعارات الماركات (شريط الموقع) ----
+    public function brands()
+    {
+        return response()->json(\App\Models\Brand::orderBy('sort_order')->orderBy('id')->get());
+    }
+
+    public function storeBrand(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:60',
+            'logo_path' => 'nullable|string',
+            'logo_url' => 'nullable|url|max:500',
+        ]);
+        $data['sort_order'] = (\App\Models\Brand::max('sort_order') ?? 0) + 1;
+
+        return response()->json(\App\Models\Brand::create($data), 201);
+    }
+
+    public function deleteBrand(\App\Models\Brand $brand)
+    {
+        $brand->delete();
+
+        return response()->json(['message' => 'تم حذف الشعار']);
+    }
+
     private function validated(Request $request): array
     {
         return $request->validate([

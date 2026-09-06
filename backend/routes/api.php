@@ -21,6 +21,7 @@ Route::get('/health', function () {
 // ---- الموقع العام (بلا تسجيل) ----
 Route::get('/site/settings', [SiteController::class, 'settings']);
 Route::get('/site/facets', [SiteController::class, 'facets']);
+Route::get('/site/brands', [SiteController::class, 'brands']);
 Route::get('/site/vehicles', [SiteController::class, 'vehicles']);
 Route::get('/site/vehicles/featured', [SiteController::class, 'featured']);
 Route::get('/site/vehicles/{vehicle}', [SiteController::class, 'show']);
@@ -53,4 +54,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/dashboard/makes/{make}', [DashboardController::class, 'deleteMake']);
     Route::post('/dashboard/makes/{make}/models', [DashboardController::class, 'storeModel']);
     Route::delete('/dashboard/models/{carModel}', [DashboardController::class, 'deleteModel']);
+
+    Route::get('/dashboard/brands', [DashboardController::class, 'brands']);
+    Route::post('/dashboard/brands', [DashboardController::class, 'storeBrand']);
+    Route::delete('/dashboard/brands/{brand}', [DashboardController::class, 'deleteBrand']);
 });

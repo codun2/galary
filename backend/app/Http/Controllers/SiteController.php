@@ -55,6 +55,11 @@ class SiteController extends Controller
         return response()->json(Setting::all_map());
     }
 
+    public function brands()
+    {
+        return response()->json(\App\Models\Brand::orderBy('sort_order')->orderBy('id')->get());
+    }
+
     /** قوائم البحث: الماركات وموديلاتها وسنواتها (من المخزون الفعلي) */
     public function facets()
     {

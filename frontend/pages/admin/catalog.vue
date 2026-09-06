@@ -34,21 +34,70 @@
         </form>
       </div>
     </div>
+
+    <!-- شريط شعارات الماركات -->
+    <div class="panel" style="margin-top:28px;">
+      <h3 class="sec-t"><i class="ti ti-carousel-horizontal" style="color:var(--accent);"></i> شريط شعارات الماركات (يظهر بالصفحة الرئيسية)</h3>
+      <p class="page-sub" style="margin-bottom:16px;">أضف شعارات الشركات العالمية — صورة مرفوعة أو رابط شعار جاهز.</p>
+
+      <div class="blist">
+        <div v-for="b in brands" :key="b.id" class="bitem">
+          <img v-if="b.logo_path || b.logo_url" :src="b.logo_path ? fileUrl(b.logo_path) : b.logo_url" :alt="b.name" />
+          <span>{{ b.name }}</span>
+          <button class="bx" @click="delBrand(b)" title="حذف"><i class="ti ti-x"></i></button>
+        </div>
+        <span v-if="!brands.length" class="none">لا شعارات بعد</span>
+      </div>
+
+      <div class="baddrow">
+        <input v-model="nb.name" placeholder="اسم الماركة (Toyota…)" style="flex:1;" />
+        <label class="btn btn-out" style="white-space:nowrap;">
+          <i class="ti" :class="nb.logo_path ? 'ti-check' : 'ti-upload'"></i> {{ nb.logo_path ? 'تم الرفع' : 'رفع شعار' }}
+          <input type="file" hidden accept="image/*,.svg" @change="uploadLogo" />
+        </label>
+        <span style="color:var(--muted); font-size:12px;">أو</span>
+        <input v-model="nb.logo_url" placeholder="رابط الشعار https://…" dir="ltr" style="flex:1.4;" />
+        <button class="btn btn-accent" @click="addBrand" :disabled="!nb.name.trim()"><i class="ti ti-plus"></i> إضافة</button>
+      </div>
+    </div>
   </DashShell>
 </template>
 
 <script setup>
-const { api } = useApi()
+const { api, fileUrl } = useApi()
 const { fetchMe } = useAuth()
 
 const makes = ref([])
+const brands = ref([])
+const nb = reactive({ name: '', logo_path: '', logo_url: '' })
 const newMake = ref('')
 const pending = ref(true)
 const busy = ref(false)
 
 async function load() {
-  makes.value = (await api('/dashboard/catalog')).map((m) => ({ ...m, _new: '' }))
+  ;[makes.value, brands.value] = await Promise.all([
+    api('/dashboard/catalog').then((d) => d.map((m) => ({ ...m, _new: '' }))),
+    api('/dashboard/brands'),
+  ])
   pending.value = false
+}
+
+async function uploadLogo(e) {
+  const file = e.target.files?.[0]; if (!file) return
+  const fd = new FormData(); fd.append('file', file)
+  const r = await api('/uploads', { method: 'POST', body: fd })
+  nb.logo_path = r.path
+  nb.logo_url = ''
+}
+async function addBrand() {
+  await api('/dashboard/brands', { method: 'POST', body: { ...nb } })
+  Object.assign(nb, { name: '', logo_path: '', logo_url: '' })
+  await load()
+}
+async function delBrand(b) {
+  if (!confirm(`حذف شعار ${b.name}؟`)) return
+  await api(`/dashboard/brands/${b.id}`, { method: 'DELETE' })
+  await load()
 }
 async function addMake() {
   busy.value = true
@@ -91,4 +140,10 @@ onMounted(async () => {
 .none { font-size: 12.5px; color: var(--muted); }
 .addmo { display: flex; gap: 8px; }
 .addmo input { flex: 1; padding: 8px 12px; font-size: 13px; }
+.blist { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; min-height: 40px; }
+.bitem { display: flex; align-items: center; gap: 9px; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 8px 13px; font-size: 13.5px; font-weight: 600; color: #4A4F5A; }
+.bitem img { height: 26px; width: auto; }
+.bx { border: none; background: none; color: var(--muted); cursor: pointer; font-size: 14px; padding: 0; }
+.bx:hover { color: var(--accent); }
+.baddrow { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 </style>
