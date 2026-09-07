@@ -15,10 +15,9 @@
           <a v-if="waLink" :href="waLink" target="_blank" class="btn btn-ghost btn-lg"><i class="ti ti-brand-whatsapp"></i> {{ t('تواصل معنا') }}</a>
         </div>
       </div>
-    </div>
 
-    <!-- quick search (OpenLane-style card) -->
-    <form class="searchcard" @submit.prevent="goSearch">
+      <!-- quick search card (inside hero) -->
+      <form class="searchcard" @submit.prevent="goSearch">
       <div class="sc-head"><i class="ti ti-search"></i> {{ cms('search_title', 'ابحث عن سيارتك') }}</div>
       <div class="sc-grid">
         <div class="fld">
@@ -61,7 +60,8 @@
         {{ counting ? '…' : (isEn ? `Show ${matchCount} ${matchCount === 1 ? 'vehicle' : 'vehicles'}` : `عرض ${matchCount} ${carWord}`) }}
       </button>
       <NuxtLink to="/cars" class="btn btn-out btn-block sc-adv">{{ t('بحث متقدّم') }}</NuxtLink>
-    </form>
+      </form>
+    </div>
 
     <!-- brand logos strip -->
     <BrandStrip />
@@ -158,15 +158,15 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.hero { position: relative; min-height: 560px; background: #0E0F13; overflow: visible; display: flex; align-items: center; }
-.hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .5; }
-.hero .ov { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(14,15,19,.95) 20%, rgba(14,15,19,.45)); }
-.hero .in { position: relative; padding: 50px 44px; color: #fff; max-width: 620px; margin-inline-end: auto; }
+.hero { position: relative; background: #0E0F13; overflow: hidden; display: flex; align-items: center; gap: 30px; padding: 48px 44px; flex-wrap: wrap; }
+.hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .45; }
+.hero .ov { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(14,15,19,.96) 25%, rgba(14,15,19,.4)); }
+.hero .in { position: relative; color: #fff; flex: 1; min-width: 300px; max-width: 620px; }
 .hero .tag { display: inline-block; background: var(--accent); font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: 20px; margin-bottom: 16px; }
 .hero h1 { font-size: 36px; font-weight: 800; line-height: 1.3; margin-bottom: 12px; }
 .hero p { font-size: 15.5px; color: #C3C8D2; margin-bottom: 24px; max-width: 520px; }
 .acts { display: flex; gap: 12px; flex-wrap: wrap; }
-.searchcard { background: #fff; width: min(520px, calc(100% - 32px)); margin: -520px 44px 48px auto; position: relative; z-index: 2; border-radius: 18px; box-shadow: 0 20px 50px rgba(0,0,0,.25); padding: 24px; margin-left: 44px; margin-right: auto; }
+.searchcard { position: relative; z-index: 2; background: #fff; width: 460px; max-width: 100%; border-radius: 18px; box-shadow: 0 20px 50px rgba(0,0,0,.3); padding: 24px; }
 .sc-head { font-size: 17px; font-weight: 800; display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
 .sc-head i { color: var(--accent); }
 .sc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
@@ -188,6 +188,6 @@ onMounted(async () => {
 .cta { background: var(--ink); color: #fff; padding: 48px 44px; text-align: center; }
 .cta h2 { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
 .cta p { color: #C3C8D2; margin-bottom: 22px; }
-@media (max-width: 1150px) { .searchcard { margin: -40px auto 40px; } .hero { min-height: 430px; } }
-@media (max-width: 860px) { .sec, .cta { padding: 34px 16px; } .hero .in { padding: 40px 20px; } .hero h1 { font-size: 27px; } .sc-grid { grid-template-columns: 1fr; } }
+@media (max-width: 960px) { .hero { flex-direction: column; align-items: stretch; } .searchcard { width: 100%; } }
+@media (max-width: 860px) { .sec, .cta { padding: 34px 16px; } .hero { padding: 36px 16px; } .hero h1 { font-size: 27px; } .sc-grid { grid-template-columns: 1fr 1fr; } }
 </style>

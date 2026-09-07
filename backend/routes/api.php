@@ -59,5 +59,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/dashboard/brands', [DashboardController::class, 'brands']);
     Route::post('/dashboard/brands', [DashboardController::class, 'storeBrand']);
+    Route::put('/dashboard/brands/{brand}', [DashboardController::class, 'updateBrand']);
     Route::delete('/dashboard/brands/{brand}', [DashboardController::class, 'deleteBrand']);
 });

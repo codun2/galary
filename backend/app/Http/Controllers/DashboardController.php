@@ -189,6 +189,22 @@ class DashboardController extends Controller
         return response()->json(\App\Models\Brand::create($data), 201);
     }
 
+    public function updateBrand(Request $request, \App\Models\Brand $brand)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:60',
+            'logo_path' => 'nullable|string',
+            'logo_url' => 'nullable|url|max:500',
+        ]);
+        // لو رُفع شعار جديد، أفرغ الرابط والعكس
+        if ($request->filled('logo_path')) $data['logo_url'] = null;
+        elseif ($request->filled('logo_url')) $data['logo_path'] = null;
+
+        $brand->update($data);
+
+        return response()->json(['message' => 'تم تعديل الشعار', 'brand' => $brand]);
+    }
+
     public function deleteBrand(\App\Models\Brand $brand)
     {
         $brand->delete();

@@ -26,15 +26,15 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.strip { background: #fff; border-block: 1px solid var(--line); padding: 20px 0; overflow: hidden; }
-.track { display: flex; width: max-content; animation: scroll-rtl 38s linear infinite; }
+.strip { background: #fff; border-block: 1px solid var(--line); padding: 26px 0; overflow: hidden; }
+.track { display: flex; width: max-content; animation: scroll-rtl 42s linear infinite; }
 .strip.ltr .track { animation-name: scroll-ltr; }
 .strip:hover .track { animation-play-state: paused; }
-.bi { display: flex; align-items: center; gap: 10px; margin: 0 32px; opacity: .75; transition: .2s; }
+.bi { display: flex; align-items: center; gap: 12px; margin: 0 40px; opacity: .8; transition: .2s; }
 .bi:hover { opacity: 1; }
-.bi img { height: 34px; width: auto; }
-.nm { font-size: 17px; font-weight: 700; color: #8A909C; white-space: nowrap; letter-spacing: .5px; }
-.nm.sm { font-size: 13.5px; font-weight: 600; }
+.bi img { height: 46px; width: auto; }
+.nm { font-size: 20px; font-weight: 700; color: #8A909C; white-space: nowrap; letter-spacing: .5px; }
+.nm.sm { font-size: 15px; font-weight: 600; }
 /* حلقة لا نهائية سلسة — RTL يتحرك من اليمين لليسار، LTR بالعكس */
 @keyframes scroll-rtl { from { transform: translateX(50%); } to { transform: translateX(0); } }
 @keyframes scroll-ltr { from { transform: translateX(0); } to { transform: translateX(-50%); } }

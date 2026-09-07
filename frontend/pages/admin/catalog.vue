@@ -61,11 +61,21 @@
       <p class="page-sub" style="margin-bottom:16px;">أضف شعارات الشركات العالمية — صورة مرفوعة أو رابط شعار جاهز.</p>
 
       <div class="blist">
-        <div v-for="b in brands" :key="b.id" class="bitem">
-          <img v-if="b.logo_path || b.logo_url" :src="b.logo_path ? fileUrl(b.logo_path) : b.logo_url" :alt="b.name" />
-          <span>{{ b.name }}</span>
-          <button class="bx" @click="delBrand(b)" title="حذف"><i class="ti ti-x"></i></button>
-        </div>
+        <template v-for="b in brands" :key="b.id">
+          <div v-if="editBrand?.id === b.id" class="bitem editing">
+            <img v-if="editBrand.logo_path || editBrand.logo_url" :src="editBrand.logo_path ? fileUrl(editBrand.logo_path) : editBrand.logo_url" :alt="editBrand.name" />
+            <input v-model="editBrand.name" style="width:100px;" />
+            <label class="bmini" title="تغيير الشعار"><i class="ti ti-photo"></i><input type="file" hidden accept="image/*,.svg" @change="editLogo" /></label>
+            <i class="ti ti-check ok" @click="saveBrand" title="حفظ"></i>
+            <i class="ti ti-x" @click="editBrand = null" title="إلغاء"></i>
+          </div>
+          <div v-else class="bitem">
+            <img v-if="b.logo_path || b.logo_url" :src="b.logo_path ? fileUrl(b.logo_path) : b.logo_url" :alt="b.name" />
+            <span>{{ b.name }}</span>
+            <i class="ti ti-edit bedit" @click="startEditBrand(b)" title="تعديل"></i>
+            <button class="bx" @click="delBrand(b)" title="حذف"><i class="ti ti-x"></i></button>
+          </div>
+        </template>
         <span v-if="!brands.length" class="none">لا شعارات بعد</span>
       </div>
 
@@ -92,6 +102,7 @@ const brands = ref([])
 const newModels = reactive({})
 const editMake = ref(null)
 const editModel = ref(null)
+const editBrand = ref(null)
 const nb = reactive({ name: '', logo_path: '', logo_url: '' })
 const newMake = ref('')
 const { confirmDlg } = useConfirm()
