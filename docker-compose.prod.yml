@@ -1,0 +1,52 @@
+# Production stack for showroom.smartunita.com (Contabo VPS /opt/galary)
+# Project name pinned so this never clashes with other /opt/<x>/repo stacks.
+name: galary
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: galary-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: galary
+      MYSQL_USER: galary
+      MYSQL_PASSWORD: Galary_pr0d_7nK3x
+      MYSQL_ROOT_PASSWORD: Galary_root_9wT2v
+    volumes:
+      - galary-db-data:/var/lib/mysql
+
+  backend:
+    build:
+      context: ./docker/php
+    container_name: galary-backend
+    restart: unless-stopped
+    working_dir: /app
+    command: >
+      sh -c "composer install --no-interaction --prefer-dist --optimize-autoloader &&
+             php artisan storage:link --force &&
+             php artisan migrate --force &&
+             php artisan serve --host=0.0.0.0 --port=8000"
+    volumes:
+      - ./backend:/app
+    ports:
+      - "127.0.0.1:8008:8000"
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../docker/prod/frontend.Dockerfile
+    container_name: galary-frontend
+    restart: unless-stopped
+    environment:
+      NUXT_PUBLIC_API_BASE: https://showroom.smartunita.com/api
+      NITRO_HOST: 0.0.0.0
+      NITRO_PORT: 3000
+    ports:
+      - "127.0.0.1:8009:3000"
+    depends_on:
+      - backend
+
+volumes:
+  galary-db-data:
