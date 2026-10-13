@@ -12,7 +12,7 @@
         <p>{{ cms('hero_subtitle', 'تشكيلة مختارة من أفضل السيارات المفحوصة بأسعار تنافسية وضمان المعرض.') }}</p>
         <div class="acts">
           <NuxtLink to="/cars" class="btn btn-accent btn-lg">{{ t('تصفّح السيارات') }}</NuxtLink>
-          <a v-if="waLink" :href="waLink" target="_blank" class="btn btn-ghost btn-lg"><i class="ti ti-brand-whatsapp"></i> {{ t('تواصل معنا') }}</a>
+          <NuxtLink to="/contact" class="btn btn-ghost btn-lg"><i class="ti ti-message"></i> {{ t('تواصل معنا') }}</NuxtLink>
         </div>
       </div>
 
@@ -83,10 +83,11 @@
     <div class="sec" style="padding-top:0;">
       <div class="sec-head" style="justify-content:center;"><h2>{{ cms('why_title', 'ليش أوتو غاليري؟') }}</h2></div>
       <div class="why">
-        <div class="w"><i class="ti ti-shield-check"></i><h4>{{ cms('why1_title') || 'سيارات مفحوصة' }}</h4><p>{{ cms('why1_text') || 'كل سيارة تمرّ بفحص شامل قبل العرض.' }}</p></div>
-        <div class="w"><i class="ti ti-tag"></i><h4>{{ cms('why2_title') || 'أسعار واضحة' }}</h4><p>{{ cms('why2_text') || 'بلا مفاجآت — السعر المعروض هو السعر.' }}</p></div>
-        <div class="w"><i class="ti ti-file-certificate"></i><h4>{{ cms('why3_title') || 'ضمان المعرض' }}</h4><p>{{ cms('why3_text') || 'ضمان على المحرك والقير حسب السيارة.' }}</p></div>
-        <div class="w"><i class="ti ti-headset"></i><h4>{{ cms('why4_title') || 'خدمة ما بعد البيع' }}</h4><p>{{ cms('why4_text') || 'فريقنا معك حتى بعد الاستلام.' }}</p></div>
+        <div class="w" v-for="(c, i) in whyCards" :key="i">
+          <i :class="`ti ${c.icon || 'ti-check'}`"></i>
+          <h4>{{ (isEn ? (c.title_en || c.title) : c.title) || '' }}</h4>
+          <p>{{ (isEn ? (c.text_en || c.text) : c.text) || '' }}</p>
+        </div>
       </div>
     </div>
 
@@ -105,6 +106,24 @@
 const { api } = useApi()
 const { settings, loadSettings, waLink } = useSettings()
 const { t, cms, isEn } = useLang()
+
+// بطاقات "ليش نحن" الافتراضية — تُستبدل بما يحفظه الأدمن (settings.why_cards)
+const DEFAULT_WHY = [
+  { icon: 'ti-shield-check', title: 'سيارات مفحوصة', title_en: 'Inspected Cars', text: 'كل سيارة تمرّ بفحص شامل قبل العرض.', text_en: 'Every car passes a full inspection before listing.' },
+  { icon: 'ti-tag', title: 'أسعار واضحة', title_en: 'Clear Pricing', text: 'بلا مفاجآت — السعر المعروض هو السعر.', text_en: 'No surprises — the listed price is the price.' },
+  { icon: 'ti-file-certificate', title: 'ضمان المعرض', title_en: 'Showroom Warranty', text: 'ضمان على المحرك والقير حسب السيارة.', text_en: 'Engine & gearbox warranty depending on the car.' },
+  { icon: 'ti-headset', title: 'خدمة ما بعد البيع', title_en: 'After-Sales Service', text: 'فريقنا معك حتى بعد الاستلام.', text_en: 'Our team stays with you after delivery.' },
+  { icon: 'ti-cash', title: 'تمويل ميسّر', title_en: 'Easy Financing', text: 'خيارات تقسيط وتمويل مرنة.', text_en: 'Flexible installment & financing options.' },
+  { icon: 'ti-refresh', title: 'استبدال سيارتك', title_en: 'Trade-In', text: 'نستبدل سيارتك القديمة بأخرى من معرضنا.', text_en: 'Trade your old car for one from our showroom.' },
+]
+
+const whyCards = computed(() => {
+  try {
+    const arr = JSON.parse(settings.value.why_cards || '[]')
+    if (Array.isArray(arr) && arr.length) return arr
+  } catch {}
+  return DEFAULT_WHY
+})
 
 const cars = ref([])
 const pending = ref(true)
@@ -166,7 +185,7 @@ onMounted(async () => {
 .hero h1 { font-size: 36px; font-weight: 800; line-height: 1.3; margin-bottom: 12px; }
 .hero p { font-size: 15.5px; color: #C3C8D2; margin-bottom: 24px; max-width: 520px; }
 .acts { display: flex; gap: 12px; flex-wrap: wrap; }
-.searchcard { position: relative; z-index: 2; background: #fff; width: 460px; max-width: 100%; border-radius: 18px; box-shadow: 0 20px 50px rgba(0,0,0,.3); padding: 24px; }
+.searchcard { position: relative; z-index: 2; background: #fff; width: 460px; max-width: 100%; border-radius: 18px; box-shadow: 0 20px 50px rgba(0,0,0,.3); padding: 24px; margin-inline-end: 28px; }
 .sc-head { font-size: 17px; font-weight: 800; display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
 .sc-head i { color: var(--accent); }
 .sc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }

@@ -37,7 +37,7 @@
 </template>
 
 <script setup>
-const { t, isEn } = useLang()
+const { t, isEn, loc } = useLang()
 const { api } = useApi()
 const { settings, loadSettings, waLink } = useSettings()
 const route = useRoute()

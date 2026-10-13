@@ -97,8 +97,10 @@ onMounted(async () => {
 .vd { display: grid; grid-template-columns: 1.5fr 1fr; gap: 28px; padding: 16px 44px 40px; }
 .gal .main { height: 380px; border-radius: 14px; overflow: hidden; background: #E3E6EB; display: flex; align-items: center; justify-content: center; color: #B4BAC6; }
 .gal .main img { width: 100%; height: 100%; object-fit: cover; }
-.thumbs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 12px; }
-.thumbs img { height: 76px; width: 100%; object-fit: cover; border-radius: 9px; cursor: pointer; border: 2px solid transparent; }
+.thumbs { display: flex; gap: 10px; margin-top: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; scrollbar-width: thin; }
+.thumbs::-webkit-scrollbar { height: 6px; }
+.thumbs::-webkit-scrollbar-thumb { background: var(--line); border-radius: 6px; }
+.thumbs img { height: 76px; width: 110px; flex: 0 0 110px; object-fit: cover; border-radius: 9px; cursor: pointer; border: 2px solid transparent; scroll-snap-align: start; }
 .thumbs img.on { border-color: var(--accent); }
 .spec { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .spec .s { background: var(--bg); border-radius: 9px; padding: 11px 13px; }

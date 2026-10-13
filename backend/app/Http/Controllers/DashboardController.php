@@ -109,6 +109,12 @@ class DashboardController extends Controller
             if ($request->has($k)) Setting::put($k, $v);
         }
 
+        // بطاقات "ليش نحن" — قائمة ديناميكية تُخزَّن كـ JSON (أيقونة + نص عربي/إنجليزي)
+        if ($request->has('why_cards')) {
+            $validated = $request->validate(['why_cards' => 'nullable|string|max:20000']);
+            Setting::put('why_cards', $validated['why_cards']);
+        }
+
         return response()->json(['message' => 'تم حفظ الإعدادات']);
     }
 
