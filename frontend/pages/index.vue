@@ -84,7 +84,7 @@
       <div class="sec-head" style="justify-content:center;"><h2>{{ cms('why_title', 'ليش أوتو غاليري؟') }}</h2></div>
       <div class="why">
         <div class="w" v-for="(c, i) in whyCards" :key="i">
-          <i :class="`ti ${c.icon || 'ti-check'}`"></i>
+          <div class="ic"><i :class="`ti ${c.icon || 'ti-check'}`"></i></div>
           <h4>{{ (isEn ? (c.title_en || c.title) : c.title) || '' }}</h4>
           <p>{{ (isEn ? (c.text_en || c.text) : c.text) || '' }}</p>
         </div>
@@ -115,6 +115,8 @@ const DEFAULT_WHY = [
   { icon: 'ti-headset', title: 'خدمة ما بعد البيع', title_en: 'After-Sales Service', text: 'فريقنا معك حتى بعد الاستلام.', text_en: 'Our team stays with you after delivery.' },
   { icon: 'ti-cash', title: 'تمويل ميسّر', title_en: 'Easy Financing', text: 'خيارات تقسيط وتمويل مرنة.', text_en: 'Flexible installment & financing options.' },
   { icon: 'ti-refresh', title: 'استبدال سيارتك', title_en: 'Trade-In', text: 'نستبدل سيارتك القديمة بأخرى من معرضنا.', text_en: 'Trade your old car for one from our showroom.' },
+  { icon: 'ti-rosette-discount-check', title: 'ملكية موثّقة', title_en: 'Verified Ownership', text: 'أوراق كاملة وملكية موثّقة بلا تعقيد.', text_en: 'Complete papers and verified ownership, hassle-free.' },
+  { icon: 'ti-steering-wheel', title: 'تجربة قيادة', title_en: 'Test Drive', text: 'جرّب السيارة على الطريق قبل ما تقرّر.', text_en: 'Take it for a spin before you decide.' },
 ]
 
 const whyCards = computed(() => {
@@ -199,11 +201,37 @@ onMounted(async () => {
 .sec-head h2 { font-size: 26px; font-weight: 800; }
 .sec-head p { color: var(--muted); font-size: 14px; margin-top: 4px; }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-.why { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
-.why .w { text-align: center; padding: 26px 18px; background: #fff; border: 1px solid var(--line); border-radius: 14px; }
-.why .w i { font-size: 30px; color: var(--accent); }
-.why .w h4 { font-size: 16px; font-weight: 700; margin: 12px 0 6px; }
-.why .w p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+.why { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+.why .w {
+  text-align: start;
+  padding: 24px 22px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.why .w::before {
+  content: '';
+  position: absolute; inset-inline-start: 0; top: 0; bottom: 0;
+  width: 3px; background: var(--accent);
+  transform: scaleY(0); transform-origin: top;
+  transition: transform .2s ease;
+}
+.why .w:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(22, 24, 29, .10); border-color: transparent; }
+.why .w:hover::before { transform: scaleY(1); }
+.why .w .ic {
+  width: 52px; height: 52px; border-radius: 13px;
+  display: grid; place-items: center;
+  background: #FEF3F2; color: var(--accent);
+  margin-bottom: 14px;
+  transition: background .2s ease, color .2s ease;
+}
+.why .w .ic i { font-size: 26px; }
+.why .w:hover .ic { background: var(--accent); color: #fff; }
+.why .w h4 { font-size: 16px; font-weight: 700; margin: 0 0 7px; }
+.why .w p { font-size: 13.5px; color: var(--muted); line-height: 1.75; margin: 0; }
 .cta { background: var(--ink); color: #fff; padding: 48px 44px; text-align: center; }
 .cta h2 { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
 .cta p { color: #C3C8D2; margin-bottom: 22px; }
